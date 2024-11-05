@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Projex - Projekte (Listenansicht)</title>
+</head>
+<body>
+    <header>
+        <h1>Projekte</h1>
+        <nav>
+            <button onclick="window.location.href='login.html'">Abmelden</button>
+        </nav>
+    </header>
+    <main>
+        <h2>Projektliste</h2>
+        <ul id="project-list">
+            <!-- Dynamisch generierte Projektliste -->
+        </ul>
+    </main>
+    <script>
+        // Beispiel-Projekte
+        const projects = [
+            { title: "Projekt 1", description: "Beschreibung von Projekt 1" },
+            { title: "Projekt 2", description: "Beschreibung von Projekt 2" }
+        ];
+
+        const projectList = document.getElementById('project-list');
+        projects.forEach(project => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${project.title}: ${project.description}`;
+            projectList.appendChild(listItem);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Projex - Projekte (Kachelansicht)</title>
+</head>
+<body>
+    <header>
+        <h1>Projekte</h1>
+        <nav>
+            <button onclick="window.location.href='login.html'">Abmelden</button>
+        </nav>
+    </header>
+    <main>
+        <h2>Projekte in Kachelansicht</h2>
+        <div id="project-tiles">
+            <!-- Dynamisch generierte Kacheln -->
+        </div>
+    </main>
+    <script>
+        // Beispiel-Projekte
+        const projects = [
+            { title: "Projekt 1", description: "Beschreibung von Projekt 1" },
+            { title: "Projekt 2", description: "Beschreibung von Projekt 2" }
+        ];
+
+        const projectTiles = document.getElementById('project-tiles');
+        projects.forEach(project => {
+            const tile = document.createElement('div');
+            tile.className = 'project-tile';
+            tile.innerHTML = `<h3>${project.title}</h3><p>${project.description}</p>`;
+            projectTiles.appendChild(tile);
+        });
+    </script>
+</body>
+</html>

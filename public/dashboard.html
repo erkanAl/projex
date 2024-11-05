@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Projex - Dashboard</title>
+</head>
+<body>
+    <header>
+        <h1>Dashboard</h1>
+        <nav>
+            <button onclick="window.location.href='login.html'">Abmelden</button>
+        </nav>
+    </header>
+    <main>
+        <h2>Willkommen, <span id="welcome-username"></span>!</h2>
+        <div class="tab-buttons">
+            <button id="projects-tab" onclick="showProjects()">Projekte</button>
+            <button id="sports-tab" onclick="showSportsActivities()">Sportaktivitäten</button>
+        </div>
+        <button id="toggle-view-btn" style="display: none;" onclick="toggleView()">Wechseln zur Listenansicht</button>
+        <div id="project-tiles">
+            <h2>Projekte</h2>
+            <div id="tiles-container"></div>
+        </div>
+        <div id="project-list" style="display: none;">
+            <h2>Projektliste</h2>
+            <ul id="list-container"></ul>
+        </div>
+        <div id="sports-activities" style="display: none;">
+            <h2>Sportaktivitäten</h2>
+            <div id="sports-tiles-container"></div>
+        </div>
+        <div id="sports-list" style="display: none;">
+            <h2>Sportartenliste</h2>
+            <ul id="sports-list-container"></ul>
+        </div>
+        <button id="add-project-btn" style="display: none;" onclick="addProject()">Projekt/Sportart hinzufügen</button>
+    </main>
+    <script>
+        const username = sessionStorage.getItem('username');
+        const role = sessionStorage.getItem('role');
+        document.getElementById('welcome-username').textContent = username;
+
+        const projects = JSON.parse(sessionStorage.getItem('projects')) || [
+            { title: "Projekt 1", description: "Beschreibung von Projekt 1" },
+            { title: "Projekt 2", description: "Beschreibung von Projekt 2" },
+            { title: "Projekt 3", description: "Beschreibung von Projekt 3" },
+        ];
+
+        const sportsActivities = JSON.parse(sessionStorage.getItem('sports')) || [
+            { title: "Basketball", description: "Regelmäßiges Training und Spiele." },
+            { title: "Fußball", description: "Wöchentliche Spiele und Turniere." },
+            { title: "Schwimmen", description: "Schwimmkurse für Anfänger und Fortgeschrittene." },
+        ];
+
+        function displayProjects() {
+            const tilesContainer = document.getElementById('tiles-container');
+            const listContainer = document.getElementById('list-container');
+
+            tilesContainer.innerHTML = '';
+            listContainer.innerHTML = '';
+
+            projects.forEach(project => {
+                // Kachelansicht
+                const tile = document.createElement('div');
+                tile.className = 'project-tile';
+                tile.innerHTML = `<h3>${project.title}</h3><p>${project.description}</p>`;
+                tilesContainer.appendChild(tile);
+
+                // Listenansicht
+                const listItem = document.createElement('li');
+                listItem.textContent = `${project.title}: ${project.description}`;
+                listContainer.appendChild(listItem);
+            });
+        }
+
+        function displaySportsActivities() {
+            const tilesContainer = document.getElementById('sports-tiles-container');
+            const listContainer = document.getElementById('sports-list-container');
+
+            tilesContainer.innerHTML = '';
+            listContainer.innerHTML = '';
+
+            sportsActivities.forEach(activity => {
+                // Kachelansicht
+                const tile = document.createElement('div');
+                tile.className = 'project-tile';
+                tile.innerHTML = `<h3>${activity.title}</h3><p>${activity.description}</p>`;
+                tilesContainer.appendChild(tile);
+
+                // Listenansicht
+                const listItem = document.createElement('li');
+                listItem.textContent = `${activity.title}: ${activity.description}`;
+                listContainer.appendChild(listItem);
+            });
+        }
+
+        function showProjects() {
+            document.getElementById('project-tiles').style.display = 'block';
+            document.getElementById('project-list').style.display = 'none';
+            document.getElementById('sports-activities').style.display = 'none';
+            document.getElementById('sports-list').style.display = 'none';
+            displayProjects();
+        }
+
+        function showSportsActivities() {
+            document.getElementById('project-tiles').style.display = 'none';
+            document.getElementById('project-list').style.display = 'none';
+            document.getElementById('sports-activities').style.display = 'block';
+            document.getElementById('sports-list').style.display = 'none';
+            displaySportsActivities();
+        }
+
+        function toggleView() {
+            const tilesContainer = document.getElementById('project-tiles');
+            const listContainer = document.getElementById('project-list');
+            const sportsTilesContainer = document.getElementById('sports-tiles-container');
+            const sportsListContainer = document.getElementById('sports-list');
+
+            const toggleButton = document.getElementById('toggle-view-btn');
+
+            if (tilesContainer.style.display === 'none') {
+                tilesContainer.style.display = 'block';
+                listContainer.style.display = 'none';
+                toggleButton.textContent = 'Wechseln zur Listenansicht';
+            } else {
+                tilesContainer.style.display = 'none';
+                listContainer.style.display = 'block';
+                toggleButton.textContent = 'Wechseln zur Kachelansicht';
+            }
+
+            // Wenn die Sportartenansicht angezeigt wird
+            if (sportsTilesContainer.style.display === 'block') {
+                sportsTilesContainer.style.display = 'none';
+                sportsListContainer.style.display = 'block';
+            } else {
+                sportsTilesContainer.style.display = 'block';
+                sportsListContainer.style.display = 'none';
+            }
+        }
+
+        function addProject() {
+            const projectType = prompt("Möchten Sie ein Projekt oder eine Sportart hinzufügen? (geben Sie 'Projekt' oder 'Sportart' ein)").toLowerCase();
+            const title = prompt("Geben Sie den Titel ein:");
+            const description = prompt("Geben Sie die Beschreibung ein:");
+            if (title && description) {
+                if (projectType === 'projekt') {
+                    projects.push({ title: title, description: description });
+                    sessionStorage.setItem('projects', JSON.stringify(projects));
+                    alert("Projekt hinzugefügt!");
+                    displayProjects();
+                } else if (projectType === 'sportart') {
+                    sportsActivities.push({ title: title, description: description });
+                    sessionStorage.setItem('sports', JSON.stringify(sportsActivities));
+                    alert("Sportart hinzugefügt!");
+                    displaySportsActivities();
+                } else {
+                    alert("Ungültiger Typ! Bitte geben Sie 'Projekt' oder 'Sportart' ein.");
+                }
+            } else {
+                alert("Titel und Beschreibung sind erforderlich!");
+            }
+        }
+
+        function initializeView() {
+            // Standardmäßig die Projektansicht anzeigen
+            showProjects();
+
+            if (role === 'student') {
+                // Schüler können nur die Kachelansicht sehen
+                document.getElementById('toggle-view-btn').style.display = 'none'; // Button zum Wechseln ausblenden
+            } else if (role === 'teacher' || role === 'admin') {
+                // Lehrer und Admin können beide Ansichten sehen
+                document.getElementById('toggle-view-btn').style.display = 'block'; // Button zum Wechseln einblenden
+                if (role === 'admin') {
+                    document.getElementById('add-project-btn').style.display = 'block'; // Admin kann Projekte/Sportarten hinzufügen
+                }
+            }
+            displayProjects(); // Projekte beim Initialisieren anzeigen
+            displaySportsActivities(); // Sportarten beim Initialisieren anzeigen
+        }
+
+        initializeView();
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Projex - Login</title>
+</head>
+<body>
+    <header>
+        <h1>Login</h1>
+    </header>
+    <main>
+        <form id="login-form">
+            <label for="username">Benutzername:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Passwort:</label>
+            <input type="password" id="password" name="password" required>
+            <label for="role">Rolle:</label>
+            <select id="role" name="role" required>
+                <option value="student">Schüler</option>
+                <option value="teacher">Lehrer</option>
+                <option value="admin">Administrator</option>
+            </select>
+            <button type="submit">Einloggen</button>
+        </form>
+        <script>
+            document.getElementById('login-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const username = document.getElementById('username').value;
+                const role = document.getElementById('role').value;
+                // Hier wird die Authentifizierungslogik aufgerufen
+                sessionStorage.setItem('username', username);
+                sessionStorage.setItem('role', role);
+                window.location.href = 'dashboard.html';
+            });
+        </script>
+    </main>
+</body>
+</html>
